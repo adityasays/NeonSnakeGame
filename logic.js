@@ -2,6 +2,10 @@
 let game=false;
 let fx=0;
 let fy=0;
+const gameoversound = new Audio('deadth.wav')
+const foodsound = new Audio('beep.wav')
+const highscoresound = new Audio('highscoresound.wav')
+const gamesound = new Audio('gamecontisound.mp3')
 let sx=Math.floor(Math.random()*31);;
 let intervalid;
 let sy=Math.floor(Math.random()*31);;
@@ -16,6 +20,7 @@ const highscoreelem=document.getElementsByClassName("hsc")[0];
 let highscore = localStorage.getItem("high-score") || 0;
 
 highscoreelem.innerText = `High Score: ${highscore}`;
+gamesound.play()
 
 const startNormalGlow = () => {
     document.querySelector('.main').classList.remove('celebrate-glow');
@@ -26,13 +31,15 @@ const startCelebrateGlow = () => {
     document.querySelector('.main').classList.add('celebrate-glow');
     document.querySelector('.heaad').classList.add('celebrate-glow');
     setTimeout(startNormalGlow, 3000);
-};
+}
 const overdo = () => {
     
     startCelebrateGlow();
     setTimeout(() => {
         location.reload();
     }, 1000);
+    gameoversound.play()
+    gamesound.pause()
     alert("Game over! Press OK to replay");
     clearInterval(intervalid);
 };
@@ -88,11 +95,20 @@ const initg = () => {
     if (sx === fx && sy === fy) {
         changefpos();
         sb.push([fx, fy]);
+        foodsound.play()
         score = score + 1;
         highscore = score >= highscore ? score : highscore;
         localStorage.setItem("high-score", highscore);
         scoreelem.innerText = `Score: ${score}`;
+        
+        if (score > highscore) {
+            highscore = score;
+            highscoresound.play()
+            localStorage.setItem("high-score", highscore);
+            highscoreelem.innerText = `High Score: ${highscore}`;
+            startCelebrateGlow(); 
     }
+}
 
     // Updating the snake's head position
     sx += velx;
@@ -121,4 +137,5 @@ const initg = () => {
 
 changefpos();
 intervalid=setInterval(initg,125);
-document.addEventListener("keydown", changeD);
+document.addEventListener("keydown", changeD)
+

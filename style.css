@@ -109,6 +109,6 @@ body {
   }
 }
 .celebrate-glow {
-  animation: neon-glow 3s ease-in-out infinite alternate;
+  animation: neon-glow 5s ease-in-out infinite alternate;
 }
 
